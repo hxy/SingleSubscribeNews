@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -60,6 +61,16 @@ public class MainActivity extends Activity implements CallBack{
 		asViewPager = (AutoScrollViewPager)findViewById(R.id.view_pager);
 		lineIndicator = (LinePageIndicator)findViewById(R.id.indicator);
 		listView = (ListView)findViewById(R.id.newsList);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				openDetialPage(((NewsBrief)parent.getAdapter().getItem(position)).getUrl());
+			}
+			
+		});
+		
 		initLDrawer();
 		bindNewsService();
 	}
@@ -234,6 +245,12 @@ public class MainActivity extends Activity implements CallBack{
     }
 	
 	
+    private void openDetialPage(String url){
+    	Intent intent = new Intent(this,NewsDetialActivity.class);
+    	intent.putExtra("newsUrl",url);
+    	startActivity(intent);
+    }
+    
 	
 	
 	//临时方法
