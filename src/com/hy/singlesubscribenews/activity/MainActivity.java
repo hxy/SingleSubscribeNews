@@ -66,7 +66,9 @@ public class MainActivity extends Activity implements CallBack{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				openDetialPage(((NewsBrief)parent.getAdapter().getItem(position)).getUrl());
+				String url = ((NewsBrief)parent.getAdapter().getItem(position)).getUrl();
+				String description = ((NewsBrief)parent.getAdapter().getItem(position)).getDescription();
+				openDetialPage(url,description);
 			}
 			
 		});
@@ -245,9 +247,10 @@ public class MainActivity extends Activity implements CallBack{
     }
 	
 	
-    private void openDetialPage(String url){
+    private void openDetialPage(String url,String description){
     	Intent intent = new Intent(this,NewsDetialActivity.class);
     	intent.putExtra("newsUrl",url);
+    	intent.putExtra("description", description);
     	startActivity(intent);
     }
     

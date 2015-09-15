@@ -6,6 +6,8 @@ public class NewsBrief {
 	private String url;
 	private String source;
 	private String thumbnail;
+	private String description;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -29,5 +31,13 @@ public class NewsBrief {
 	}
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+	
+	public String getDescription(){
+		return description;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
 	}
 }

@@ -60,6 +60,7 @@ public class RssParser {
 			newsBrief.setUrl(getLink(node));
 			newsBrief.setThumbnail(thumbnail);
 			newsBrief.setSource(getSource(node));
+			newsBrief.setDescription(getDescription(node));
 			mlist.add(newsBrief);
 		}
 		

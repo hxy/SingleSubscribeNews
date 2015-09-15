@@ -6,5 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>
+    <string name="news_detial">文章详情</string>
+    <string name="check_original_news">查看原文</string>
 
 </resources>
