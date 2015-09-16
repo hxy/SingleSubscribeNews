@@ -111,10 +111,10 @@ public class GetNewsService extends Service {
 		RssParser parser = new RssParser();
 		try {
 			mList = parser.getNewsList(newsString);
-			for(NewsBrief news : mList){
-				String brief = "title:"+news.getTitle()+"\n"+"source:"+news.getSource()+"\n"+"thumbnail:"+news.getThumbnail();
-				Log.d("nnnn", "brief"+brief);
-			}
+//			for(NewsBrief news : mList){
+//				String brief = "title:"+news.getTitle()+"\n"+"source:"+news.getSource()+"\n"+"thumbnail:"+news.getThumbnail();
+//				Log.d("nnnn", "brief"+brief);
+//			}
 			mainHandler.sendEmptyMessage(PARSER_NEWS_FINISHED);
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block

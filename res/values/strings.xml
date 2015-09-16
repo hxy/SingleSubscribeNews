@@ -8,5 +8,6 @@
     <string name="drawer_close">drawer close</string>
     <string name="news_detial">文章详情</string>
     <string name="check_original_news">查看原文</string>
+    <string name="progressbar_text">正在拼命加载</string>
 
 </resources>

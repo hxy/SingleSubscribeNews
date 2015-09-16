@@ -36,7 +36,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements CallBack{
@@ -53,11 +55,13 @@ public class MainActivity extends Activity implements CallBack{
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
     private boolean drawerArrowColor;
+    private LinearLayout progressBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		progressBar = (LinearLayout)findViewById(R.id.progressBar);
 		asViewPager = (AutoScrollViewPager)findViewById(R.id.view_pager);
 		lineIndicator = (LinePageIndicator)findViewById(R.id.indicator);
 		listView = (ListView)findViewById(R.id.newsList);
@@ -106,7 +110,7 @@ public class MainActivity extends Activity implements CallBack{
 		}
 		ListViewAdapter adapter = new ListViewAdapter(this,listView,newsList);
 		listView.setAdapter(adapter);
-		
+		progressBar.setVisibility(View.GONE);
 		getTitlePicList(adapter);
 	}
 	
