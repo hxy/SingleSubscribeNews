@@ -95,7 +95,7 @@ public class MainActivity extends Activity implements CallBack{
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				getNewsService = ((GetNewsService.ServiceBind)service).getService();
 				getNewsService.setCallBack(MainActivity.this);
-				getNewsService.getNewsList(0);
+				getNewsService.getNewsList(100);
 			}
 		};
 		
