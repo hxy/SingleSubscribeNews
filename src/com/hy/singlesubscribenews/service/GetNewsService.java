@@ -43,6 +43,7 @@ public class GetNewsService extends Service {
 	private String url = "http://10.0.2.2:8080/SingleSubscribeNewsServer/newsList.jsp";
 	private AsyncHttpClient mClient = new AsyncHttpClient();
 	private ArrayList<NewsBrief> mList = null;
+	private int[] titleNewsIndex;
 	private CallBack callBack;
 
 	private static final int PARSER_NEWS_LIST = 0;
@@ -62,7 +63,7 @@ public class GetNewsService extends Service {
 	}
 
 	public interface CallBack{
-		public void onParserNewsFinished(ArrayList<NewsBrief> list);
+		public void onParserNewsFinished(ArrayList<NewsBrief> list,int[] titleNewsIndex);
 	}
 	
 	public void setCallBack(CallBack callBack){
@@ -80,7 +81,7 @@ public class GetNewsService extends Service {
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
 				case PARSER_NEWS_FINISHED:
-					callBack.onParserNewsFinished(mList);
+					callBack.onParserNewsFinished(mList,titleNewsIndex);
 					break;
 
 				default:
@@ -96,24 +97,7 @@ public class GetNewsService extends Service {
 
 	public void getNewsList(int newsType) {
 		Log.d("bbbb", "getNewsList");
-//		mClient.get(url, new AsyncHttpResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(String arg0) {
-//				Log.d("bbbb", "onSuccess:");
-//				Message msg = Message.obtain();
-//				msg.what = PARSER_NEWS_LIST;
-//				msg.obj = arg0;
-//				threadHandler.sendMessage(msg);
-//			}
-//
-//			@Override
-//			public void onFailure(Throwable arg0, String arg1) {
-//				Log.d("aaaa", arg0.toString() + "------" + arg1);
-//			}
-//
-//		});
-		
+
 		Message msg = Message.obtain();
 		msg.what = GET_NEWS_STRING;
 		msg.arg1 = newsType;
@@ -125,7 +109,8 @@ public class GetNewsService extends Service {
 		//RssParser parser = new RssParser();
 		NewsParser parser = new NewsParser();
 		try {
-			mList = parser.parseJsonToNewslist(newsJsonString);
+			mList = parser.parseNewslist(newsJsonString);
+			titleNewsIndex = parser.parserTitleNewsIndex(newsJsonString);
 //			for(NewsBrief news : mList){
 //				String brief = "title:"+news.getTitle()+"\n"+"source:"+news.getSource()+"\n"+"thumbnail:"+news.getThumbnail();
 //				Log.d("nnnn", "brief"+brief);

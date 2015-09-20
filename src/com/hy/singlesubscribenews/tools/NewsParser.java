@@ -10,16 +10,17 @@ import com.hy.singlesubscribenews.objects.NewsBrief;
 
 public class NewsParser {
 
-	public ArrayList<NewsBrief> parseJsonToNewslist(String jsonString) throws JSONException{
+	public ArrayList<NewsBrief> parseNewslist(String jsonString) throws JSONException{
 		ArrayList<NewsBrief> newsList = new ArrayList<NewsBrief>();
 		JSONArray jsonArray = new JSONArray(jsonString);
-		for(int n=0;n<jsonArray.length();n++){
-			newsList.add(parseJsonToNews(jsonArray.getJSONObject(n)));
+		//n要从1开始，因为第一个位置保存了title news list 的下标
+		for(int n=1;n<jsonArray.length();n++){
+			newsList.add(parseNews(jsonArray.getJSONObject(n)));
 		}
 		return newsList;
 	}
 	
-	private NewsBrief parseJsonToNews(JSONObject jsonObject) throws JSONException{
+	private NewsBrief parseNews(JSONObject jsonObject) throws JSONException{
 		NewsBrief news = new NewsBrief();
 		news.setTitle(jsonObject.getString("title"));
 		news.setUrl(jsonObject.getString("url"));
@@ -28,5 +29,15 @@ public class NewsParser {
 		news.setDescription(jsonObject.getString("description"));
 		
 		return news;
+	}
+	
+	public int[] parserTitleNewsIndex(String jsonString) throws JSONException{
+		JSONArray jsonArray = new JSONArray(jsonString);
+		JSONObject jsonObject = jsonArray.getJSONObject(0);
+		int one = jsonObject.getInt("one");
+		int tow = jsonObject.getInt("tow");
+		int three = jsonObject.getInt("three");
+		int[] index = {one,tow,three};
+		return index;
 	}
 }

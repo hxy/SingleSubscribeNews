@@ -61,7 +61,7 @@ public class ListViewAdapter extends BaseAdapter {
 		}
 		Holder holder = (Holder)convertView.getTag();
 		holder.title.setText(news.getTitle());
-		//holder.source.setText(news.getSource());
+		holder.source.setText(news.getSource());
 		holder.thumbnail.setTag(news.getThumbnail());
 		holder.thumbnail.setImageBitmap(imageLoader.loadImage(news.getThumbnail()));
 		

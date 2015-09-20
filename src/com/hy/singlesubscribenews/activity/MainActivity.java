@@ -30,6 +30,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,6 +40,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements CallBack{
@@ -54,7 +57,6 @@ public class MainActivity extends Activity implements CallBack{
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
-    private boolean drawerArrowColor;
     private LinearLayout progressBar;
 	
 	@Override
@@ -103,7 +105,7 @@ public class MainActivity extends Activity implements CallBack{
 	}
 
 	@Override
-	public void onParserNewsFinished(ArrayList<NewsBrief> newsList) {
+	public void onParserNewsFinished(ArrayList<NewsBrief> newsList,int[] titleNewsIndex) {
 		if(newsList == null || newsList.size() == 0){
 			Toast.makeText(this, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
 			return;
@@ -111,7 +113,7 @@ public class MainActivity extends Activity implements CallBack{
 		ListViewAdapter adapter = new ListViewAdapter(this,listView,newsList);
 		listView.setAdapter(adapter);
 		progressBar.setVisibility(View.GONE);
-		getTitlePicList(adapter);
+		initTitlePicList(newsList,titleNewsIndex);
 	}
 	
 	
@@ -257,31 +259,63 @@ public class MainActivity extends Activity implements CallBack{
     	intent.putExtra("description", description);
     	startActivity(intent);
     }
-    
-	
-	
-	//临时方法
-	private void getTitlePicList(ListViewAdapter adapter){
+
+	private void initTitlePicList(ArrayList<NewsBrief> newsList,int[] titleNewsIndex){
+		ImageLoader imageLoader = new ImageLoader();
 		ArrayList<View> pageList = new ArrayList<View>();
-		ImageView page1 = new ImageView(this);
-		page1.setBackgroundColor(0x7f000000);
-		page1.setScaleType(ScaleType.FIT_XY);
-		page1.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		page1.setTag(((NewsBrief)adapter.getItem(0)).getThumbnail());
+		RelativeLayout page1 = (RelativeLayout)getLayoutInflater().inflate(R.layout.titlenews_layout, null);
+		ImageView page1Image = (ImageView)page1.findViewById(R.id.titleNews_Pic);
+		page1Image.setImageBitmap(imageLoader.loadImage(newsList.get(titleNewsIndex[0]).getThumbnail(), page1Image));
+		TextView page1Title = (TextView)page1.findViewById(R.id.titleNews_title);
+		page1Title.setText(newsList.get(titleNewsIndex[0]).getTitle());
+		page1.setTag(newsList.get(titleNewsIndex[0]));
+		page1.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				NewsBrief news = (NewsBrief)v.getTag();
+				String url = news.getUrl();
+				String description = news.getDescription();
+				openDetialPage(url,description);
+			}
+		});
 		pageList.add(page1);
-		ImageView page2 = new ImageView(this);
-		page2.setScaleType(ScaleType.FIT_XY);
-		page2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		page2.setTag(((NewsBrief)adapter.getItem(1)).getThumbnail());
-		pageList.add(page2);
-		ImageView page3 = new ImageView(this);
-		page3.setScaleType(ScaleType.FIT_XY);
-		page3.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		page3.setTag(((NewsBrief)adapter.getItem(2)).getThumbnail());
-		pageList.add(page3);
 		
-		ImageLoader imageLoader = adapter.getImageLoader();
-		imageLoader.setImageViewList(pageList);
+		RelativeLayout page2 = (RelativeLayout)getLayoutInflater().inflate(R.layout.titlenews_layout, null);
+		ImageView page2Image = (ImageView)page2.findViewById(R.id.titleNews_Pic);
+		page2Image.setImageBitmap(imageLoader.loadImage(newsList.get(titleNewsIndex[1]).getThumbnail(), page2Image));
+		TextView page2Title = (TextView)page2.findViewById(R.id.titleNews_title);
+		page2Title.setText(newsList.get(titleNewsIndex[1]).getTitle());
+		page2.setTag(newsList.get(titleNewsIndex[1]));
+		page2.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				NewsBrief news = (NewsBrief)v.getTag();
+				String url = news.getUrl();
+				String description = news.getDescription();
+				openDetialPage(url,description);
+			}
+		});
+		pageList.add(page2);
+		
+		RelativeLayout page3 = (RelativeLayout)getLayoutInflater().inflate(R.layout.titlenews_layout, null);
+		ImageView page3Image = (ImageView)page3.findViewById(R.id.titleNews_Pic);
+		page3Image.setImageBitmap(imageLoader.loadImage(newsList.get(titleNewsIndex[2]).getThumbnail(), page3Image));
+		TextView page3Title = (TextView)page3.findViewById(R.id.titleNews_title);
+		page3Title.setText(newsList.get(titleNewsIndex[2]).getTitle());
+		page3.setTag(newsList.get(titleNewsIndex[2]));
+		page3.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				NewsBrief news = (NewsBrief)v.getTag();
+				String url = news.getUrl();
+				String description = news.getDescription();
+				openDetialPage(url,description);
+			}
+		});
+		pageList.add(page3);
 		
 		ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(pageList);
 		asViewPager.setAdapter(viewPagerAdapter);

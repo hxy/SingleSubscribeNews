@@ -4,22 +4,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.LruCache;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 
 public class ImageLoader {
 
-	private LruCache<String, Bitmap> lruCache;
+	private static LruCache<String, Bitmap> lruCache;
 	private AbsListView absListView;
 	
+	public ImageLoader(){}
 	@SuppressLint("NewApi")
 	public ImageLoader(AbsListView absListView){
 		this.absListView = absListView;
@@ -37,8 +36,18 @@ public class ImageLoader {
 	public Bitmap loadImage(String url){
 		Bitmap bitmap = lruCache.get(url);
 		if(bitmap == null){
-			LoadImageTask loadTask = new LoadImageTask();
-			loadTask.execute(url);
+			LoadImageTask loadTask = new LoadImageTask(url,null);
+			loadTask.execute();
+		}
+		return bitmap;
+	}
+	
+	@SuppressLint("NewApi")
+	public Bitmap loadImage(String url,ImageView imageView){
+		Bitmap bitmap = lruCache.get(url);
+		if(bitmap == null){
+			LoadImageTask loadTask = new LoadImageTask(url,imageView);
+			loadTask.execute();
 		}
 		return bitmap;
 	}
@@ -75,15 +84,19 @@ public class ImageLoader {
 	}
 	
 	
-	private class LoadImageTask extends AsyncTask<String, Void, Bitmap>{
+	private class LoadImageTask extends AsyncTask<Void, Void, Bitmap>{
 		String imageUrl = null;
+		ImageView imageView = null;
+		public LoadImageTask(String url,ImageView imageView){
+		      this.imageUrl = url;
+		      this.imageView = imageView;
+		}
 		@SuppressLint("NewApi")
 		@Override
-		protected Bitmap doInBackground(String... params) {
-			imageUrl = params[0];
+		protected Bitmap doInBackground(Void... params) {
 			Bitmap bitmap = null;
 			try {
-				URL url = new URL(params[0]);
+				URL url = new URL(imageUrl);
 				bitmap = getSampleBitmap(readStream(url.openStream()),80);
 				if(bitmap != null){
 					lruCache.put(imageUrl, bitmap);
@@ -96,29 +109,18 @@ public class ImageLoader {
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			ImageView imageView = (ImageView)absListView.findViewWithTag(imageUrl);
+			ImageView imageView = null;
+			if(this.imageView ==null){
+				imageView = (ImageView)absListView.findViewWithTag(imageUrl);
+			}else {
+				imageView = this.imageView;
+			}
+			
 			if(imageView != null){
 				imageView.setImageBitmap(result);
 			}
-			setBitmapToImageView(imageViewsList,imageUrl,result);
 		}
-		
-		
-		
+
 	}
-	
-	
-	//临时方法
-	private ArrayList<View> imageViewsList; 
-	public void setImageViewList(ArrayList<View> list){
-		imageViewsList = list;
-	}
-	
-	private void setBitmapToImageView(ArrayList<View> imageViewsList,String url,Bitmap bitmap){
-		for(View view : imageViewsList){
-			if(((String)view.getTag()).equals(url)){
-				((ImageView)view).setImageBitmap(bitmap);
-			}
-		}
-	}
+
 }

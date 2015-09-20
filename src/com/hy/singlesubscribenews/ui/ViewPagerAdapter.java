@@ -16,7 +16,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override  
     public void destroyItem(ViewGroup container, int position, Object object)   {     
-        container.removeView(mListViews.get(position));//删除页卡  
+        container.removeView(mListViews.get(position));//删除页卡
     }  
 
 
